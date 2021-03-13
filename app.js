@@ -35,7 +35,7 @@ $("document").ready(function () {
             </head>
             <body>
                 ${html}
-                <script src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.js' type='text/javascript'></script>
+                <script src='//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.js' type='text/javascript'></script>
                 <script type='text/javascript'>${script}</script>
             </body>
         </html>
