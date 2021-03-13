@@ -20,12 +20,9 @@ $("document").ready(function () {
     jsEditor.resize();
   });
 
-  // RUN Button
-  $("#btnRun").click(function (event) {
-    event.preventDefault();
-
+  const setPreview = () => {
     var previewDoc = window.frames[0].document;
-
+    previewDoc.open();
     var css = ace.edit("css-editor").getSession().getValue();
     var script = ace.edit("js-editor").getSession().getValue();
     var html = ace.edit("html-editor").getSession().getValue();
@@ -38,6 +35,7 @@ $("document").ready(function () {
             </head>
             <body>
                 ${html}
+                <script src='http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.js' type='text/javascript'></script>
                 <script type='text/javascript'>${script}</script>
             </body>
         </html>
@@ -45,27 +43,37 @@ $("document").ready(function () {
 
     previewDoc.write(output);
     previewDoc.close();
+  };
+
+  // RUN Button
+  $("#btnRun").click(function (event) {
+    event.preventDefault();
+    var iframe = document.getElementById("preview");
+    iframe.src = "about:blank";
+    setTimeout(setPreview, 200);
   });
 
   // Preview code on page load
   $("#btnRun").click();
-});
 
-$("#btnPrettify").click(function (event) {
-  event.preventDefault();
+  $("#btnPrettify").click(function (event) {
+    event.preventDefault();
 
-  var html = ace.edit("html-editor").getSession().getValue();
-  var html2 = style_html(html);
+    var html = ace.edit("html-editor").getSession().getValue();
+    var html2 = style_html(html);
 
-  ace.edit("html-editor").getSession().setValue(html2);
+    ace.edit("html-editor").getSession().setValue(html2);
 
-  var css = ace.edit("css-editor").getSession().getValue();
-  var css2 = css_beautify(css);
+    var css = ace.edit("css-editor").getSession().getValue();
+    var css2 = css_beautify(css);
 
-  ace.edit("css-editor").getSession().setValue(css2);
+    ace.edit("css-editor").getSession().setValue(css2);
 
-  var js = ace.edit("js-editor").getSession().getValue();
-  var js2 = js_beautify(js);
+    var js = ace.edit("js-editor").getSession().getValue();
+    var js2 = js_beautify(js);
 
-  ace.edit("js-editor").getSession().setValue(js2);
+    ace.edit("js-editor").getSession().setValue(js2);
+  });
+
+  $("#btnPrettify").click();
 });

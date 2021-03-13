@@ -49,9 +49,14 @@
     <!-- nav -->
     <nav class="navbar bg-dark text-white">
       <a class="navbar-brand text-white" href="#">Angularjs IDE</a>
-      <ul class="navbar-nav mr-auto">
+      <ul class="navbar-nav mr-auto ml-2">
         <li class="nav-item">
           <button class="btn btn-outline-success" id="btnRun">RUN</button>
+        </li>
+        <li class="nav-item ml-2">
+          <button class="btn btn-outline-info" id="btnPrettify">
+            PRETTIFY
+          </button>
         </li>
       </ul>
     </nav>
@@ -115,6 +120,19 @@
 
       const theme = "ace/theme/monokai";
 
+      const HTMLValue = `<div ng-app="appModule">
+            <div ng-controller="appController">
+                <h1>{{msg}}</h1>
+            </div>
+        </div>
+      `;
+
+      const jsValue = `let app = angular.module('appModule',[]);
+        app.controller("appController", function($scope) {
+            $scope.msg = "Hello"; 
+        });
+      `;
+
       ace.require("ace/ext/language_tools");
       // ace.require("ace/emmet");
 
@@ -122,6 +140,7 @@
       htmlEditor.setTheme(theme);
       htmlEditor.getSession().setMode("ace/mode/html");
       htmlEditor.setOptions(options);
+      htmlEditor.setValue(HTMLValue);
       htmlEditor.commands.addCommand(keyBinding);
 
       var cssEditor = ace.edit("css-editor");
@@ -134,6 +153,7 @@
       jsEditor.setTheme(theme);
       jsEditor.getSession().setMode("ace/mode/javascript");
       jsEditor.setOptions(options);
+      jsEditor.setValue(jsValue);
       jsEditor.commands.addCommand(keyBinding);
     </script>
   </body>
