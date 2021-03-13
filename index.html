@@ -29,6 +29,16 @@
       type="text/javascript"
       charset="utf-8"
     ></script>
+    <script src="./js/ace/ext-emmet.js"></script>
+
+    <!-- Beautify Web - HTML, CSS, JS -->
+    <script src="js/beautify/beautify-html.js"></script>
+    <script src="js/beautify/beautify-css.js"></script>
+    <script src="js/beautify/beautify-js.js"></script>
+
+    <!-- Angularjs -->
+    <script src="./js/angular/angular.min.js"></script>
+
     <script defer src="app.js"></script>
 
     <title>Angularjs IDE</title>
@@ -88,6 +98,7 @@
       const options = {
         enableBasicAutocompletion: true,
         enableLiveAutocompletion: true,
+        enableEmmet: true,
         wrap: true,
         autoScrollEditorIntoView: true,
         fontSize: 18,
@@ -105,6 +116,7 @@
       const theme = "ace/theme/monokai";
 
       ace.require("ace/ext/language_tools");
+      // ace.require("ace/emmet");
 
       var htmlEditor = ace.edit("html-editor");
       htmlEditor.setTheme(theme);

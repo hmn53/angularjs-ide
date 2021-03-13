@@ -50,3 +50,22 @@ $("document").ready(function () {
   // Preview code on page load
   $("#btnRun").click();
 });
+
+$("#btnPrettify").click(function (event) {
+  event.preventDefault();
+
+  var html = ace.edit("html-editor").getSession().getValue();
+  var html2 = style_html(html);
+
+  ace.edit("html-editor").getSession().setValue(html2);
+
+  var css = ace.edit("css-editor").getSession().getValue();
+  var css2 = css_beautify(css);
+
+  ace.edit("css-editor").getSession().setValue(css2);
+
+  var js = ace.edit("js-editor").getSession().getValue();
+  var js2 = js_beautify(js);
+
+  ace.edit("js-editor").getSession().setValue(js2);
+});
