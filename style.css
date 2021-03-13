@@ -1,0 +1,97 @@
+html,
+body {
+  height: 100%;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  padding: 0;
+  margin: 0;
+  overflow: auto;
+}
+
+.page-container {
+  margin: 20px;
+}
+
+/* horizontal panel*/
+
+.panel-container {
+  display: flex;
+  flex-direction: row;
+  min-height: 100px;
+  overflow: hidden;
+  height: inherit;
+  /* avoid browser level touch actions */
+}
+
+.panel-left,
+.panel-mid {
+  flex: 0 0 auto;
+  width: 33%;
+  height: auto;
+  white-space: nowrap;
+  overflow: hidden;
+  background-color: whitesmoke;
+  color: black;
+}
+
+.splitter,
+.splitter1 {
+  flex: 0 0 auto;
+  width: 18px;
+  background: url(https://raw.githubusercontent.com/RickStrahl/jquery-resizable/master/assets/vsizegrip.png)
+    center center no-repeat #535353;
+  /* min-height: 200px; */
+  height: inherit;
+  min-height: 100px;
+  cursor: col-resize;
+}
+
+.panel-right {
+  flex: 0 0 auto;
+  /* resizable */
+  width: 100%;
+  background: whitesmoke;
+  overflow: hidden;
+}
+
+/* vertical panel */
+
+.panel-container-vertical {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid silver;
+  overflow: hidden;
+}
+
+.panel-top {
+  flex: 0 0 auto;
+  /* only manually resize */
+  min-height: 100px;
+  height: 400px;
+  width: 100%;
+  white-space: nowrap;
+  background: #838383;
+  color: white;
+}
+
+.splitter-horizontal {
+  flex: 0 0 auto;
+  height: 18px;
+  background: url(https://raw.githubusercontent.com/RickStrahl/jquery-resizable/master/assets/hsizegrip.png)
+    center center no-repeat #535353;
+  cursor: row-resize;
+}
+
+.panel-bottom {
+  flex: 1 1 auto;
+  /* resizable */
+  height: 30%;
+  background: #eee;
+}
+
+.editor {
+  height: 100%;
+  width: 100%;
+  border: 1px #cecece solid;
+}
