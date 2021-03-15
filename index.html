@@ -142,6 +142,11 @@
       htmlEditor.setOptions(options);
       htmlEditor.setValue(HTMLValue);
       htmlEditor.commands.addCommand(keyBinding);
+      let count = htmlEditor.getSession().getLength();
+      htmlEditor.gotoLine(
+        count,
+        htmlEditor.getSession().getLine(count - 1).length
+      );
 
       var cssEditor = ace.edit("css-editor");
       cssEditor.setTheme(theme);

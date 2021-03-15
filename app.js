@@ -1,4 +1,18 @@
 $("document").ready(function () {
+  let splitter = document.getElementsByClassName("splitter")[0];
+  let splitter1 = document.getElementsByClassName("splitter1")[0];
+  splitter.addEventListener("mousemove", (e) => {
+    if (e.clientX > window.innerWidth - 200) {
+      $(".panel-left").css("width", `${window.innerWidth - 300}px`);
+      $(".panel-mid").css("width", `50px`);
+      // $(".panel-right").css("width", `50px`);
+    }
+  });
+  splitter1.addEventListener("mousemove", (e) => {
+    if (e.clientX > window.innerWidth - 200) {
+      $(".panel-mid").css("width", `${window.innerWidth - 750}px`);
+    }
+  });
   // resizable editors config
   $(".panel-left").resizable({
     handleSelector: ".splitter",
