@@ -1,4 +1,5 @@
 $("document").ready(function () {
+  const serverURL = "http://localhost:5000";
   let splitter = document.getElementsByClassName("splitter")[0];
   let splitter1 = document.getElementsByClassName("splitter1")[0];
   splitter.addEventListener("mousemove", (e) => {
@@ -33,6 +34,27 @@ $("document").ready(function () {
     cssEditor.resize();
     jsEditor.resize();
   });
+
+  //socket
+  const socket = io(serverURL);
+
+  //get data from socket
+  const url = new URL(window.location.href);
+  const id = url.searchParams.get("id");
+  if (id) {
+    axios
+      .get(`${serverURL}/data/${id}`)
+      .then(function (response) {
+        const data = response.data;
+        console.log(data);
+        ace.edit("html-editor").getSession().setValue(data.html);
+        ace.edit("css-editor").getSession().setValue(data.css);
+        ace.edit("js-editor").getSession().setValue(data.js);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   const setPreview = () => {
     var previewDoc = window.frames[0].document;
@@ -90,4 +112,28 @@ $("document").ready(function () {
   });
 
   $("#btnPrettify").click();
+
+  //collaborate click
+  $("#btnCollaborate").click(function (event) {
+    event.preventDefault();
+
+    const uid = Date.now();
+    const data = {
+      html: ace.edit("html-editor").getSession().getValue(),
+      css: ace.edit("css-editor").getSession().getValue(),
+      js: ace.edit("js-editor").getSession().getValue(),
+    };
+
+    console.log(uid, data, `${serverURL}/data/${uid}`);
+    axios
+      .post(`${serverURL}/data/${uid}`, data)
+      .then(function (response) {
+        console.log(response);
+        url.searchParams.set("id", uid);
+        window.history.replaceState(null, null, url);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  });
 });
