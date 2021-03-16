@@ -65,6 +65,7 @@ $("document").ready(function () {
     ace.edit("js-editor").getSession().on("change", onChange);
   }
   if (id) {
+    $("#btnCollaborate").prop("disabled", true);
     axios
       .get(`${serverURL}/data/${id}`)
       .then(function (response) {
@@ -72,6 +73,7 @@ $("document").ready(function () {
         ace.edit("html-editor").getSession().setValue(data.html);
         ace.edit("css-editor").getSession().setValue(data.css);
         ace.edit("js-editor").getSession().setValue(data.js);
+        $("#btnRun").click();
 
         socket.on(`remote-change-${id}`, (data) => {
           if (data.editorID === editorID) {
@@ -147,11 +149,42 @@ $("document").ready(function () {
 
   $("#btnPrettify").click();
 
+  //copy to clipboard
+  function copyToClipboard(elem) {
+    var target = elem;
+    var currentFocus = document.activeElement;
+    target.focus();
+    target.setSelectionRange(0, target.value.length);
+    var succeed;
+    try {
+      succeed = document.execCommand("copy");
+    } catch (e) {
+      console.warn(e);
+      succeed = false;
+    }
+    if (currentFocus && typeof currentFocus.focus === "function") {
+      currentFocus.focus();
+    }
+    if (succeed) {
+      $(".copied").animate({ top: -25, opacity: 0 }, 700, function () {
+        $(this).css({ top: 0, opacity: 1 });
+      });
+    }
+    return succeed;
+  }
+
+  $("#copyButton, #copyTarget").on("click", function () {
+    copyToClipboard(document.getElementById("copyTarget"));
+  });
+
   //collaborate click
   $("#btnCollaborate").click(function (event) {
     event.preventDefault();
 
     const uid = Date.now();
+    $("#copyTarget").val(`${url}?id=${uid}`);
+    $("#openModal").click();
+    $("#btnCollaborate").prop("disabled", true);
     const data = {
       html: ace.edit("html-editor").getSession().getValue(),
       css: ace.edit("css-editor").getSession().getValue(),

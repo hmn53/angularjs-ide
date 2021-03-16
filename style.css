@@ -108,3 +108,13 @@ body {
   display: flex;
   flex-direction: row;
 }
+
+.modal-header {
+  border: none;
+  background-color: rgb(32, 33, 36);
+}
+.modal-body {
+  align-items: center;
+  padding: 10% 3%;
+  margin: 0;
+}
