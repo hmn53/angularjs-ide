@@ -58,7 +58,6 @@ $("document").ready(function () {
           js: ace.edit("js-editor").getSession().getValue(),
         },
       };
-      console.log("Event emitted with data", data);
       socket.emit("change", data);
     }
     ace.edit("html-editor").getSession().on("change", onChange);
@@ -70,17 +69,14 @@ $("document").ready(function () {
       .get(`${serverURL}/data/${id}`)
       .then(function (response) {
         const data = response.data;
-        console.log(data);
         ace.edit("html-editor").getSession().setValue(data.html);
         ace.edit("css-editor").getSession().setValue(data.css);
         ace.edit("js-editor").getSession().setValue(data.js);
 
         socket.on(`remote-change-${id}`, (data) => {
           if (data.editorID === editorID) {
-            console.log("same editor");
             return;
           }
-          console.log("remote change", data);
           fromSetValue = true;
           ace.edit("html-editor").getSession().setValue(data.html);
           ace.edit("css-editor").getSession().setValue(data.css);
@@ -162,19 +158,15 @@ $("document").ready(function () {
       js: ace.edit("js-editor").getSession().getValue(),
     };
 
-    console.log(uid, data, `${serverURL}/data/${uid}`);
     axios
       .post(`${serverURL}/data/${uid}`, data)
       .then(function (response) {
-        console.log(response);
         url.searchParams.set("id", uid);
         window.history.replaceState(null, null, url);
         socket.on(`remote-change-${uid}`, (data) => {
           if (data.editorID === editorID) {
-            console.log("same editor");
             return;
           }
-          console.log("remote change", data);
           fromSetValue = true;
           ace.edit("html-editor").getSession().setValue(data.html);
           ace.edit("css-editor").getSession().setValue(data.css);
