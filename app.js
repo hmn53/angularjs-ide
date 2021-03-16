@@ -1,4 +1,6 @@
 $("document").ready(function () {
+  const editorID = Date.now();
+  let fromSetValue = false;
   const serverURL = "http://localhost:5000";
   let splitter = document.getElementsByClassName("splitter")[0];
   let splitter1 = document.getElementsByClassName("splitter1")[0];
@@ -41,6 +43,28 @@ $("document").ready(function () {
   //get data from socket
   const url = new URL(window.location.href);
   const id = url.searchParams.get("id");
+
+  function emitEvent(id) {
+    function onChange() {
+      if (fromSetValue) {
+        return;
+      }
+      const data = {
+        id,
+        value: {
+          editorID,
+          html: ace.edit("html-editor").getSession().getValue(),
+          css: ace.edit("css-editor").getSession().getValue(),
+          js: ace.edit("js-editor").getSession().getValue(),
+        },
+      };
+      console.log("Event emitted with data", data);
+      socket.emit("change", data);
+    }
+    ace.edit("html-editor").getSession().on("change", onChange);
+    ace.edit("css-editor").getSession().on("change", onChange);
+    ace.edit("js-editor").getSession().on("change", onChange);
+  }
   if (id) {
     axios
       .get(`${serverURL}/data/${id}`)
@@ -50,6 +74,20 @@ $("document").ready(function () {
         ace.edit("html-editor").getSession().setValue(data.html);
         ace.edit("css-editor").getSession().setValue(data.css);
         ace.edit("js-editor").getSession().setValue(data.js);
+
+        socket.on(`remote-change-${id}`, (data) => {
+          if (data.editorID === editorID) {
+            console.log("same editor");
+            return;
+          }
+          console.log("remote change", data);
+          fromSetValue = true;
+          ace.edit("html-editor").getSession().setValue(data.html);
+          ace.edit("css-editor").getSession().setValue(data.css);
+          ace.edit("js-editor").getSession().setValue(data.js);
+          fromSetValue = false;
+        });
+        emitEvent(id);
       })
       .catch(function (error) {
         console.log(error);
@@ -131,6 +169,19 @@ $("document").ready(function () {
         console.log(response);
         url.searchParams.set("id", uid);
         window.history.replaceState(null, null, url);
+        socket.on(`remote-change-${uid}`, (data) => {
+          if (data.editorID === editorID) {
+            console.log("same editor");
+            return;
+          }
+          console.log("remote change", data);
+          fromSetValue = true;
+          ace.edit("html-editor").getSession().setValue(data.html);
+          ace.edit("css-editor").getSession().setValue(data.css);
+          ace.edit("js-editor").getSession().setValue(data.js);
+          fromSetValue = false;
+        });
+        emitEvent(`${uid}`);
       })
       .catch(function (error) {
         console.log(error);
