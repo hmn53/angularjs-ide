@@ -74,6 +74,7 @@ $("document").ready(function () {
         ace.edit("html-editor").getSession().setValue(data.html);
         ace.edit("css-editor").getSession().setValue(data.css);
         ace.edit("js-editor").getSession().setValue(data.js);
+        $("#btnRun").click();
 
         socket.on(`remote-change-${id}`, (data) => {
           if (data.editorID === editorID) {
