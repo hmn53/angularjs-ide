@@ -45,7 +45,7 @@ $("document").ready(function () {
   const id = url.searchParams.get("id");
 
   function emitEvent(id) {
-    function onChange() {
+    function onChange(editor) {
       if (fromSetValue) {
         return;
       }
@@ -53,16 +53,30 @@ $("document").ready(function () {
         id,
         value: {
           editorID,
-          html: ace.edit("html-editor").getSession().getValue(),
-          css: ace.edit("css-editor").getSession().getValue(),
-          js: ace.edit("js-editor").getSession().getValue(),
+          html: null,
+          css: null,
+          js: null,
         },
       };
+      data["value"][editor] = ace
+        .edit(`${editor}-editor`)
+        .getSession()
+        .getValue();
+      console.log("Event emitted with data", data);
       socket.emit("change", data);
     }
-    ace.edit("html-editor").getSession().on("change", onChange);
-    ace.edit("css-editor").getSession().on("change", onChange);
-    ace.edit("js-editor").getSession().on("change", onChange);
+    ace
+      .edit("html-editor")
+      .getSession()
+      .on("change", () => onChange("html"));
+    ace
+      .edit("css-editor")
+      .getSession()
+      .on("change", () => onChange("css"));
+    ace
+      .edit("js-editor")
+      .getSession()
+      .on("change", () => onChange("js"));
   }
   if (id) {
     $("#btnCollaborate").prop("disabled", true);
@@ -80,9 +94,15 @@ $("document").ready(function () {
             return;
           }
           fromSetValue = true;
-          ace.edit("html-editor").getSession().setValue(data.html);
-          ace.edit("css-editor").getSession().setValue(data.css);
-          ace.edit("js-editor").getSession().setValue(data.js);
+          if (data.html != null) {
+            ace.edit("html-editor").getSession().setValue(data.html);
+          }
+          if (data.css != null) {
+            ace.edit("css-editor").getSession().setValue(data.css);
+          }
+          if (data.js != null) {
+            ace.edit("js-editor").getSession().setValue(data.js);
+          }
           fromSetValue = false;
         });
         emitEvent(id);
@@ -201,9 +221,15 @@ $("document").ready(function () {
             return;
           }
           fromSetValue = true;
-          ace.edit("html-editor").getSession().setValue(data.html);
-          ace.edit("css-editor").getSession().setValue(data.css);
-          ace.edit("js-editor").getSession().setValue(data.js);
+          if (data.html != null) {
+            ace.edit("html-editor").getSession().setValue(data.html);
+          }
+          if (data.css != null) {
+            ace.edit("css-editor").getSession().setValue(data.css);
+          }
+          if (data.js != null) {
+            ace.edit("js-editor").getSession().setValue(data.js);
+          }
           fromSetValue = false;
         });
         emitEvent(`${uid}`);
