@@ -1,7 +1,9 @@
 $("document").ready(function () {
   const editorID = Date.now();
   let fromSetValue = false;
-  const serverURL = "https://angularjs-ide-server.herokuapp.com";
+  // const serverURL = "https://angularjs-ide-server.herokuapp.com";
+  const serverURL = "https://angularjs-ide-server.vercel.app";
+
   let splitter = document.getElementsByClassName("splitter")[0];
   let splitter1 = document.getElementsByClassName("splitter1")[0];
   splitter.addEventListener("mousemove", (e) => {
